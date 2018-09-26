@@ -1,11 +1,11 @@
 
-
+# Probability distribution of the english language
 probabilities = {'A': 0.082, 'B': 0.015, 'C': 0.028, 'D': 0.043, 'E': 0.0127, 'F': 0.022, 'G': 0.02, 'H': 0.061,
                     'I': 0.07, 'J': 0.002, 'K': 0.008, 'L': 0.04, 'M': .024, 'N': 0.067, 'O': .075, 'P': 0.019,
                     'Q': 0.001, 'R': 0.06, 'S': 0.063, 'T': 0.091, 'U' : 0.028, 'V': 0.01, 'W': 0.023,
                     'X': 0.001, 'Y': 0.02, 'Z': 0.001 }
 
-# The three following functions were used to determine key length by manual inspection
+# The four following functions were used to determine key length by manual inspection
 
 def gcd(a, b):
     if not b:
@@ -17,6 +17,7 @@ def gcd_list(numbers):
     return reduce(lambda x, y: gcd(x, y), numbers)
 
 
+# Returns the number of times each trigram occurred in a string and where it occurred
 def trigramOccurrences(string):
     trigramMap = {}
     for i in range(0, len(string) - 3):
@@ -34,6 +35,15 @@ def trigramOccurrences(string):
 
     return trigramMap
 
+# Gets trigrams that appear frequently in a text.
+def getFrequentTrigrams(string):
+    occurrences = trigramOccurrences(string)
+    for key in occurrences:
+        value = occurrences[key]
+        if value['count'] > 1:
+            print key, value
+
+# Creates letter frequency tables for strings.
 def letterOccurrences(string):
     letterMap = {}
     for i in range(0, len(string)):
@@ -44,6 +54,7 @@ def letterOccurrences(string):
             letterMap[letter] = 1
     return letterMap
 
+# Constructs a Yi based on key length
 def constructYi(string, i, m):
     position = i
     yi = ""
@@ -53,6 +64,7 @@ def constructYi(string, i, m):
 
     return yi
 
+# Computes Mg values for a Yi
 def Mg(string, g, nprime):
     total = 0
     letterMap = letterOccurrences(string)
@@ -70,15 +82,8 @@ cipherText2 = "BNVSNSIHQCEELSSKKYERIFJKXUMBGYKAMQLJTYAVFBKVTDVBPVVRJYYLAOKYMPQSC
 classProblemText = "BCRRBCQORHKEPSLSLCWRWXXDESPEZMPYQWCEBCBOSFHCIZHSQWVHCBRWRVLNEGDRCKRRQS"
 
 
-def getFrequentTrigrams(string):
-    occurrences = trigramOccurrences(string)
-    for key in occurrences:
-        value = occurrences[key]
-        if value['count'] > 0:
-            print key, value
-
-
-
+# Helper to get a single key letter. This is not perfect as it doesn't handle ties and will
+# need to be improved.
 def getKeyLetter(yi, nprime):
     mg = 0
     firstLetter = None
@@ -90,7 +95,7 @@ def getKeyLetter(yi, nprime):
 
     return chr(firstLetter + 65)
 
-
+# Returns the key for a ciphertext with key length m
 def getKey(string, m):
     key = ""
     nprime = len(string) / m
@@ -100,5 +105,6 @@ def getKey(string, m):
 
     return key
 
+# Prints keys for hw problems
 print getKey(cipherText, 6)
 print getKey(cipherText2, 6)
